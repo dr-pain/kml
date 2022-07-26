@@ -1,0 +1,120 @@
+!*******************************************************************************
+!  Copyright(C) 2001-2012 Intel Corporation. All Rights Reserved.
+!
+!  The source code, information  and  material ("Material") contained herein is
+!  owned  by Intel Corporation or its suppliers or licensors, and title to such
+!  Material remains  with Intel Corporation  or its suppliers or licensors. The
+!  Material  contains proprietary information  of  Intel or  its  suppliers and
+!  licensors. The  Material is protected by worldwide copyright laws and treaty
+!  provisions. No  part  of  the  Material  may  be  used,  copied, reproduced,
+!  modified, published, uploaded, posted, transmitted, distributed or disclosed
+!  in any way  without Intel's  prior  express written  permission. No  license
+!  under  any patent, copyright  or  other intellectual property rights  in the
+!  Material  is  granted  to  or  conferred  upon  you,  either  expressly,  by
+!  implication, inducement,  estoppel or  otherwise.  Any  license  under  such
+!  intellectual  property  rights must  be express  and  approved  by  Intel in
+!  writing.
+!
+!  *Third Party trademarks are the property of their respective owners.
+!
+!  Unless otherwise  agreed  by Intel  in writing, you may not remove  or alter
+!  this  notice or  any other notice embedded  in Materials by Intel or Intel's
+!  suppliers or licensors in any way.
+!
+!*******************************************************************************
+!  Content:
+!    routines for relative error calculation
+!*******************************************************************************
+
+      real(kind=4) function sfabs(a)
+
+      real(kind=4) :: a
+
+      if(a>=0.0) then
+        sfabs=a
+      else
+        sfabs=-1.0*a
+      endif
+
+      end function
+
+
+      real(kind=8) function dfabs(a)
+
+      real(kind=8) :: a
+
+      if(a>=0.0) then
+        dfabs=a
+      else
+        dfabs=-1.0d+000*a
+      endif
+
+      if(dfabs<1e-15) then
+        dfabs=1e-15
+      endif
+
+      end function
+
+
+      real(kind=4) function srelerr(a,b)
+
+      real(kind=4) :: a
+      real(kind=4) :: b
+      real(kind=4) :: sfabs
+
+      srelerr=sfabs((a-b)/a)
+
+      end function
+
+
+      real(kind=8) function drelerr(a,b)
+
+      real(kind=8) :: a
+      real(kind=8) :: b
+      real(kind=8) :: dfabs
+
+      drelerr=dfabs((a-b)/a)
+
+      end function
+
+
+      real(kind=4) function crelerr(a,b)
+
+      complex(kind=4) :: a
+      complex(kind=4) :: b
+      real(kind=4) :: sfabs
+
+      real(kind=4) re
+      real(kind=4) im
+
+      re=(REAL(a)-REAL(b))/REAL(a)
+      im=(AIMAG(a)-AIMAG(b))/AIMAG(a)
+
+      if(re>=im) then
+        crelerr=sfabs(re)
+      else
+        crelerr=sfabs(im)
+      endif
+
+      end function
+
+
+      real(kind=4) function zrelerr(a,b)
+
+      complex(kind=8) :: a
+      complex(kind=8) :: b
+      real(kind=8) :: dfabs
+
+      real(kind=8) re
+      real(kind=8) im
+
+      re=(REAL(a)-REAL(b))/REAL(a)
+      im=(AIMAG(a)-AIMAG(b))/AIMAG(a)
+
+      if(re>=im) then
+        zrelerr=dfabs(re)
+      else
+        zrelerr=dfabs(im)
+      endif
+
+      end function
